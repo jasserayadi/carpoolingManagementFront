@@ -7945,7 +7945,7 @@ input[type=range]:focus::-ms-fill-upper {
     background-color: #1f897f;
     padding: 10px;
     font-weight: 200;
-    letter-spacing: .5;
+    letter-spacing: 1.5;
     font-size: 1rem;
     margin-bottom: 15px;
 }

@@ -13,6 +13,7 @@ import { AllTemplateFrontComponent } from './FrontOffice/all-template-front/all-
 import { FooterFrontComponent } from './FrontOffice/footer-front/footer-front.component';
 import { HeaderFrontComponent } from './FrontOffice/header-front/header-front.component';
 import { DynamicFrontComponent } from './FrontOffice/dynamic-front/dynamic-front.component';
+import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { DynamicFrontComponent } from './FrontOffice/dynamic-front/dynamic-front
     FooterFrontComponent,
     HeaderFrontComponent,
     DynamicFrontComponent,
+    HomeFrontComponent,
 
   ],
   imports: [
