@@ -5,6 +5,8 @@ import { HomeBackComponent } from "./BackOffice/home-back/home-back.component";
 import { SidebarComponent } from "./BackOffice/sidebar/sidebar.component";
 import { AllTemplateFrontComponent } from "./FrontOffice/all-template-front/all-template-front.component";
 import { HomeFrontComponent } from "./FrontOffice/home-front/home-front.component";
+import {FeedbackComponent} from "./feedback/feedback.component";
+import {AddCarpoolingComponent} from "./BackOffice/add-carpooling/add-carpooling.component";
 
 const routes: Routes = [
 
@@ -29,7 +31,12 @@ const routes: Routes = [
         component: HomeBackComponent
       }
     ]
-  }
+  },
+
+  {path:"add",
+    component:FeedbackComponent},
+  {path:"addCarpooling",
+    component:AddCarpoolingComponent}
 ];
 
 @NgModule({

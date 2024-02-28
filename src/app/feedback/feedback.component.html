@@ -1,0 +1,15 @@
+<form [formGroup]="feedbackForm" (submit)="submitFeedback()">
+  <div>
+    <label for="feedBackInput">Feedback:</label>
+    <input id="feedBackInput" formControlName="feedBack" type="text">
+
+
+    </div>
+
+  <div>
+    <label for="rateInput">Rate:</label>
+    <input id="rateInput" formControlName="rate" type="number">
+
+  </div>
+  <button type="submit">Submit Feedback</button>
+</form>

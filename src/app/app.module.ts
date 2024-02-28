@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AllTemplateBackComponent } from './BackOffice/all-template-back/all-template-back.component';
@@ -14,6 +14,9 @@ import { FooterFrontComponent } from './FrontOffice/footer-front/footer-front.co
 import { HeaderFrontComponent } from './FrontOffice/header-front/header-front.component';
 import { DynamicFrontComponent } from './FrontOffice/dynamic-front/dynamic-front.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
+import  {HttpClientModule} from "@angular/common/http";
+import { FeedbackComponent } from './feedback/feedback.component';
+import { AddCarpoolingComponent } from './BackOffice/add-carpooling/add-carpooling.component';
 
 @NgModule({
   declarations: [
@@ -29,11 +32,17 @@ import { HomeFrontComponent } from './FrontOffice/home-front/home-front.componen
     HeaderFrontComponent,
     DynamicFrontComponent,
     HomeFrontComponent,
+    FeedbackComponent,
+    AddCarpoolingComponent,
 
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
