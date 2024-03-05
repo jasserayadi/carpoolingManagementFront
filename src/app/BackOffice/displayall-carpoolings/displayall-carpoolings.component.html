@@ -1,0 +1,48 @@
+<h2>List of Carpools</h2>
+<style>h2 {
+  color: #dc3545;
+  text-align: center;
+}</style>
+
+
+<table class="carpool-table">
+  <thead>
+  <tr>
+    <th>Departure Time</th>
+    <th>Longitude Departure</th>
+    <th>Latitude Destination</th>
+    <th>Latitude Departure</th>
+    <th>Longitude Destination</th>
+    <th>Available Seats</th>
+    <th>Cost Per Seat</th>
+    <th>Day</th>
+    <th>Time</th>
+    <th>Carpooling Type</th>
+    <th>Registration Number</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let carpool of carpoolings">
+    <td>{{ carpool.departureTime }}</td>
+    <td>{{ carpool.longitudeDeparture }}</td>
+    <td>{{ carpool.latitudeDestination }}</td>
+    <td>{{ carpool.latitudeDeparture }}</td>
+    <td>{{ carpool.longitudeDestination }}</td>
+    <td>{{ carpool.availableSeats }}</td>
+    <td>{{ carpool.costPerSeat }}</td>
+    <td>{{ carpool.day }}</td>
+    <td>{{ carpool.time }}</td>
+    <td>{{ carpool.carpoolingType }}</td>
+    <td>{{ carpool.registrationNumber }}</td>
+    <td>
+      <input type="number" [(ngModel)]="newBooking.nb" name="nb" placeholder="Enter nb">
+      <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
+      <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
+      <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<app-all-template-front></app-all-template-front>

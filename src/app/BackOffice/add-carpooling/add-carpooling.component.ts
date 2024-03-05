@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {CarpoolingService} from "../../Services/carpooling.service";
-import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
-import {Carpooling} from "../../entity/Carpooling";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import { CarpoolingService } from '../../Services/carpooling.service';
+import {FormBuilder, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { Carpooling } from '../../entity/Carpooling';
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-add-carpooling',
@@ -9,38 +10,50 @@ import {Carpooling} from "../../entity/Carpooling";
   styleUrls: ['./add-carpooling.component.css']
 })
 export class AddCarpoolingComponent implements OnInit {
-    carpoolingForm!: FormGroup;
+  carpoolingForm!: FormGroup;
+  carpoolingType = ['DAILY', 'SPECIFIC'];
+  @ViewChild('carpoolingForm') formDirective!: FormGroupDirective;
 
-    constructor(private fb: FormBuilder, private carpoolingService: CarpoolingService) { }
+  constructor(private fb: FormBuilder, private carpoolingService: CarpoolingService) { }
 
-    ngOnInit(): void {
-        this.carpoolingForm = this.fb.group({
-            departureTime: ['', Validators.required],
-            longitudeDeparture: [''],
-            latitudeDestination: [''],
-            latitudeDeparture: [''],
-            longitudeDestination: [''],
-            availableSeats: [null, Validators.required],
-            costPerSeat: [null, Validators.required],
-            day: [null, Validators.required],
-            time: [null, Validators.required],
-            carpoolingType: [null, Validators.required],
-            registrationNumber: ['', Validators.required],
-        });
-    }
+  ngOnInit(): void {
+    this.carpoolingForm = this.fb.group({
+      longitudeDeparture: ['', Validators.required],
+      latitudeDeparture: ['', Validators.required],
+      longitudeDestination: ['', Validators.required],
+      latitudeDestination: ['', Validators.required],
+      availableSeats: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
+      costPerSeat: [null, [Validators.required, Validators.min(0), Validators.max(99999)]],
+      carpoolingType: ['', Validators.required],
+      day: [null, ],
+      time: [null, ],
+      departureTime: [null,],
+      registrationNumber: [null, Validators.required]
+    });
+
+  }
+  //getAvailableSeats(){
+   // return this.carpoolingForm.get('fb')
+ // }
+
 
     addCarpooling(): void {
         const carpoolingData: Carpooling = this.carpoolingForm.value;
-
-        this.carpoolingService.addCarpooling(carpoolingData).subscribe(
-            (response: any) => {
-                console.log(response);
-                // Handle successful response here, e.g., show a success message
-            },
-            (error) => {
-                console.error(error);
-                // Handle error, e.g., show an error message
-            }
-        );
+        if (this.carpoolingForm.valid) {
+            this.carpoolingService.addCarpooling(carpoolingData).subscribe(
+                (response: any) => {
+                    console.log(response);
+                    alert('Success! Carpooling data added.');
+                    this.carpoolingForm.reset();
+                },
+                (error) => {
+                    console.error(error);
+                    alert('Failed to add carpooling data. Please try again.');
+                }
+            );
+        } else {
+            alert('Please fill in all required fields.');
+        }
     }
+
 }

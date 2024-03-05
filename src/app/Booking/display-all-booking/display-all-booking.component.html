@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="content-wrapper">
+    <div *ngIf="bookings" class="bookings-table">
+      <h2>Bookings</h2>
+      <style>h2 {
+        color: #dc3545;
+        text-align: center;
+      }</style>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>NB</th>
+          <!-- Add other necessary fields -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let booking of bookings">
+          <td>{{booking.bookingID}}</td>
+          <td>{{booking.nb}}</td>
+
+          <button (click)="confirmDelete(booking.bookingID)">Delete carpooling booking</button>
+          <!-- Add other necessary fields -->
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<app-all-template-front></app-all-template-front>

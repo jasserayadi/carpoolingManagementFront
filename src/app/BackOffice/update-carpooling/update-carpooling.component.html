@@ -1,15 +1,14 @@
-<h2>new carpooling</h2>
+<h2>update carpooling</h2>
 <style>h2 {
-    color: #dc3545;
-    text-align: center;
-}</style><div>
+  color: #dc3545;
+  text-align: center;
+}</style>
+<div class="form-container">
 
-  <form [formGroup]="carpoolingForm" (ngSubmit)="addCarpooling()" class="form-container">
-
+  <form [formGroup]="carpoolingForm" class="carpooling-form">
     <label for="longitudeDeparture">Longitude Departure:</label>
     <input id="longitudeDeparture" type="text" formControlName="longitudeDeparture">
     {{carpoolingForm.get('longitudeDeparture')?.valid}}
-
     <label for="latitudeDeparture">Latitude Departure:</label>
     <input id="latitudeDeparture" type="text" formControlName="latitudeDeparture">
     {{carpoolingForm.get('latitudeDeparture')?.valid}}
@@ -21,7 +20,7 @@
     {{carpoolingForm.get('latitudeDestination')?.valid}}
     <label for="availableSeats">Available Seats:</label>
     <input id="availableSeats" type="number" formControlName="availableSeats">
-{{carpoolingForm.get('availableSeats')?.valid}}
+    {{carpoolingForm.get('availableSeats')?.valid}}
     <label for="costPerSeat">Cost Per Seat:</label>
     <input id="costPerSeat" type="number" formControlName="costPerSeat">
     {{carpoolingForm.get('costPerSeat')?.valid}}
@@ -33,10 +32,9 @@
     </select>
 
     <!-- Conditionally render the Day and Time fields based on the value of carpoolingType -->
-    <div *ngIf="carpoolingForm.get('carpoolingType')?.value === 'DAILY'">
+    <div *ngIf="carpoolingForm.get('carpoolingType')?.value === 'DAILY'" class="conditional-fields">
       <label for="day">Day:</label>
       <select id="day" formControlName="day">
-
         <option value="MONDAY">Monday</option>
         <option value="TUESDAY">Tuesday</option>
         <option value="WEDNESDAY">Wednesday</option>
@@ -47,21 +45,18 @@
 
       <label for="time">Time:</label>
       <input id="time" type="time" formControlName="time">
-
     </div>
 
     <!-- Conditionally render the Departure Time field based on the value of carpoolingType -->
-    <div *ngIf="carpoolingForm.get('carpoolingType')?.value === 'SPECIFIC'">
+    <div *ngIf="carpoolingForm.get('carpoolingType')?.value === 'SPECIFIC'" class="conditional-fields">
       <label for="departureTime">Departure Time:</label>
       <input id="departureTime" type="datetime-local" formControlName="departureTime">
-
     </div>
 
     <label for="registrationNumber">Registration Number:</label>
     <input id="registrationNumber" type="text" formControlName="registrationNumber">
-    {{carpoolingForm.get('registrationNumber')?.valid}}
 
 
-    <button type="submit">Add Carpooling</button>
+    <button type="submit" (click)="updateCarpooling()">Update User</button>
   </form>
 </div>

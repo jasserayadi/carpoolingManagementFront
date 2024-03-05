@@ -7,6 +7,10 @@ import { AllTemplateFrontComponent } from "./FrontOffice/all-template-front/all-
 import { HomeFrontComponent } from "./FrontOffice/home-front/home-front.component";
 import {FeedbackComponent} from "./feedback/feedback.component";
 import {AddCarpoolingComponent} from "./BackOffice/add-carpooling/add-carpooling.component";
+import {DisplayallCarpoolingsComponent} from "./BackOffice/displayall-carpoolings/displayall-carpoolings.component";
+import {AddBookingComponent} from "./Booking/add-booking/add-booking.component";
+import {DisplayAllBookingComponent} from "./Booking/display-all-booking/display-all-booking.component";
+import {UpdateCarpoolingComponent} from "./BackOffice/update-carpooling/update-carpooling.component";
 
 const routes: Routes = [
 
@@ -16,8 +20,9 @@ const routes: Routes = [
     children: [
       {
         path: "home",
-        component: HomeFrontComponent
-      }
+        component: HomeFrontComponent,children: [ ]
+      },
+
     ]
   },
 
@@ -28,7 +33,10 @@ const routes: Routes = [
     children: [
       {
         path: "home",
-        component: HomeBackComponent
+        component: HomeBackComponent,children:[ {
+          path: "addBooking",
+          component: AddBookingComponent
+        } ]
       }
     ]
   },
@@ -36,7 +44,29 @@ const routes: Routes = [
   {path:"add",
     component:FeedbackComponent},
   {path:"addCarpooling",
-    component:AddCarpoolingComponent}
+    component:AddCarpoolingComponent},
+  {path:"displayCarpooling",
+    component:DisplayallCarpoolingsComponent, children: [
+      {
+        path: "addBooking",
+        component: AddBookingComponent
+      },
+    ]},{path:"allBooking",
+    component:DisplayAllBookingComponent},{path:"allBooking",
+    component:DisplayAllBookingComponent},
+  {
+    path: "carpooling/:carpoolingID", component: UpdateCarpoolingComponent
+  },
+  {
+    path: "display",
+    component: DisplayallCarpoolingsComponent,children: [
+
+
+
+    ]
+  }
+
+
 ];
 
 @NgModule({

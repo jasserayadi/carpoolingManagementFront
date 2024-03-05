@@ -3,6 +3,7 @@ import {FeedBack} from "../entity/FeedBack";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Carpooling} from "../entity/Carpooling";
+import {Booking} from "../entity/Booking";
 
 @Injectable({
   providedIn: 'root'
@@ -15,4 +16,27 @@ export class CarpoolingService {
   addCarpooling(carpooling: Carpooling): Observable<Carpooling> {
     return this.http.post<Carpooling>(this.baseUrl + 'addCarpooling', carpooling);
   }
+  getAllCarpooling(): Observable<Carpooling[]> {
+    return this.http.get<Carpooling[]>(this.baseUrl + 'getAllCarpooling');
+  }
+  addBooking(booking: Booking, carpoolingID: number): Observable<Booking> {
+    // Adjust the endpoint according to your API
+    return this.http.post<Booking>(`${this.baseUrl}addBooking/${carpoolingID}`, booking);}
+  deleteCarpooling(carpoolingId: number): Observable<void> {
+    const url = `${this.baseUrl}delateCarpooling/${carpoolingId}`;
+    return this.http.delete<void>(url);
+  }
+  updateCarpooling(carpoolingID: number, carpooling: Carpooling): Observable<any> {
+    return this.http.put(`${this.baseUrl}updateCarpooling/${carpoolingID}`, carpooling);
+  }
+  updateCarpoolinge(carpooling: Carpooling): Observable<Carpooling> {
+    return this.http.put<Carpooling>(`${this.baseUrl}/updateCarpooling`, carpooling);
+  }
+
+  findCarpooling(carpoolingId: number): Observable<Carpooling> {
+    return this.http.get<Carpooling>(`/findCarpooling/${carpoolingId}`);
+  }
+
+
+
 }

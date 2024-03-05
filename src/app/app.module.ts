@@ -17,6 +17,10 @@ import { HomeFrontComponent } from './FrontOffice/home-front/home-front.componen
 import  {HttpClientModule} from "@angular/common/http";
 import { FeedbackComponent } from './feedback/feedback.component';
 import { AddCarpoolingComponent } from './BackOffice/add-carpooling/add-carpooling.component';
+import { DisplayallCarpoolingsComponent } from './BackOffice/displayall-carpoolings/displayall-carpoolings.component';
+import { AddBookingComponent } from './Booking/add-booking/add-booking.component';
+import { DisplayAllBookingComponent } from './Booking/display-all-booking/display-all-booking.component';
+import { UpdateCarpoolingComponent } from './BackOffice/update-carpooling/update-carpooling.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +38,10 @@ import { AddCarpoolingComponent } from './BackOffice/add-carpooling/add-carpooli
     HomeFrontComponent,
     FeedbackComponent,
     AddCarpoolingComponent,
+    DisplayallCarpoolingsComponent,
+    AddBookingComponent,
+    DisplayAllBookingComponent,
+    UpdateCarpoolingComponent,
 
   ],
   imports: [
@@ -42,7 +50,10 @@ import { AddCarpoolingComponent } from './BackOffice/add-carpooling/add-carpooli
     HttpClientModule,
     ReactiveFormsModule,
 
-    FormsModule
+    FormsModule,
+
+
+
   ],
   providers: [],
   bootstrap: [AppComponent]
