@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Carpooling } from "../../entity/Carpooling";
-import { CarpoolingService } from "../../Services/carpooling.service";
+import { Carpooling } from "../../../../entity/Carpooling";
+import { CarpoolingService } from "../../../../Services/carpooling.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 

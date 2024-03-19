@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {CarpoolingService} from "../../Services/carpooling.service";
-import {Carpooling} from "../../entity/Carpooling";
-import {BookingService} from "../../Services/booking.service";
-import {Booking} from "../../entity/Booking";
+import {CarpoolingService} from "../../../../Services/carpooling.service";
+import {Carpooling} from "../../../../entity/Carpooling";
+import {BookingService} from "../../../../Services/booking.service";
+import {Booking} from "../../../../entity/Booking";
 import {Router} from "@angular/router";
 import {FormGroup} from "@angular/forms";
 

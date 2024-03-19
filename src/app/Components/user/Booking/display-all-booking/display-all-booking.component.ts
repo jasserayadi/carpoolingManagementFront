@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {Booking} from "../../entity/Booking";
-import {BookingService} from "../../Services/booking.service";
+import {Booking} from "../../../../entity/Booking";
+import {BookingService} from "../../../../Services/booking.service";
 
 
 

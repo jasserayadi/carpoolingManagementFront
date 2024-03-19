@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FeedBack } from '../entity/FeedBack';
-import { FeedbackService } from '../Services/feedback.service';
+import { FeedBack } from '../../../entity/FeedBack';
+import { FeedbackService } from '../../../Services/feedback.service';
 
 @Component({
   selector: 'app-feedback',

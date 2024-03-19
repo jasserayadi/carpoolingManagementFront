@@ -131,3 +131,7 @@ button[type='submit']:hover {
 .form-container label {
   display: block; /* Make labels appear on a new line */
 }
+#map {
+  height: 400px; /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
+}
