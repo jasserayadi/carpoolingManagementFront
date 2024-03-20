@@ -58,3 +58,7 @@ h2 {
   color: black;
 }
 
+#map {
+  height: 400px; /* Adjust height as needed */
+  width: 100%;   /* Adjust width as needed */
+}

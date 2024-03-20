@@ -1,9 +1,14 @@
 <h2>List of Carpools</h2>
-<style>h2 {
-  color: #dc3545;
-  text-align: center;
-}</style>
-
+<style>
+  h2 {
+    color: #dc3545;
+    text-align: center;
+  }
+  .carpool-map {
+    height: 200px; /* Adjust the height as needed */
+    margin-bottom: 20px;
+  }
+</style>
 
 <table class="carpool-table">
   <thead>
@@ -40,6 +45,8 @@
       <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
       <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
       <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
+      <!-- Map for Departure and Destination Locations -->
+      <div id="map_{{ carpool.carpoolingID }}" class="carpool-map"></div>
     </td>
   </tr>
   </tbody>
