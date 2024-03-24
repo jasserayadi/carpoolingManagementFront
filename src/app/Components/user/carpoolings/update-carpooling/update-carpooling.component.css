@@ -153,3 +153,7 @@ button[type='submit']:hover {
 .conditional-fields {
     margin-top: 10px;
 }
+#map {
+  height: 400px; /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
+}

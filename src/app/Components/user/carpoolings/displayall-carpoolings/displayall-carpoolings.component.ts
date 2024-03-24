@@ -4,6 +4,7 @@ import { Carpooling } from '../../../../entity/Carpooling';
 import { BookingService } from '../../../../Services/booking.service';
 import { Booking } from '../../../../entity/Booking';
 import * as L from 'leaflet';
+import {CarpoolingType} from "../../../../entity/CarpoolingType";
 
 @Component({
   selector: 'app-displayall-carpoolings',
@@ -14,6 +15,12 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
 
   carpoolings: Carpooling[] = [];
   newBooking: Booking = new Booking();
+  departureLocationNames: string[] = [];
+  destinationLocationNames: string[] = [];
+  selectedCarpoolingType: CarpoolingType; // Variable to store the selected carpooling type
+// Inside your component class
+  carpoolingTypes: CarpoolingType[] = [CarpoolingType.SPECIFIC, CarpoolingType.DAILY]; // Replace with your actual carpooling types
+  departureLocationFilter: string = '';
 
   constructor(private carpoolingService: CarpoolingService, private bookingService: BookingService, private cd: ChangeDetectorRef) { }
 
@@ -24,6 +31,23 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // No need to initialize maps here
   }
+  filterCarpoolsByDeparture(): void {
+    const filterValue = this.departureLocationFilter.toLowerCase().trim();
+    if (filterValue === '') {
+      // If the search query is empty, reset the list to all carpools
+      this.getCarpools();
+    } else {
+      // Filter carpools based on the departure place
+      this.carpoolings = this.carpoolings.filter(carpool => {
+        const departureName = this.departureLocationNames[this.carpoolings.indexOf(carpool)].toLowerCase();
+        return departureName.includes(filterValue);
+      });
+      // Reinitialize maps after filtering
+      this.initializeMaps();
+    }
+  }
+
+
 
   async initializeMaps(): Promise<void> {
     try {
@@ -42,7 +66,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
         const mapId = `map_${carpool.carpoolingID}`;
         const map = L.map(mapId, {
           center: [latitudeDeparture, longitudeDeparture],
-          zoom: 10
+          zoom: 15
         });
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -79,31 +103,38 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
           .bindTooltip(departureName, { direction: 'top', permanent: true })
           .openTooltip();
 
+        // Add destination marker with custom icon and tooltip
         L.marker([latitudeDestination, longitudeDestination], { icon: destIcon })
           .addTo(map)
           .bindPopup('Destination Location')
-          .bindTooltip(destinationName, { direction: 'top', permanent: true })
+          .bindTooltip(destinationName, { direction: 'top', permanent: true })  // Ensure destination name is bound
           .openTooltip();
-
       }
     } catch (error) {
       console.error('Error initializing maps:', error);
     }
   }
 
+
   async getCarpools(): Promise<void> {
     try {
       const data = await this.carpoolingService.getAllCarpooling().toPromise();
+      const departureLocationNames: string[] = []; // Array to store departure location names
+      for (const carpool of data) {
+        const departureLocation = L.latLng(parseFloat(carpool.latitudeDeparture), parseFloat(carpool.longitudeDeparture));
+        // Fetch and store departure location name
+        departureLocationNames.push(await this.getLocationName(departureLocation));
+      }
       this.carpoolings = data;
+      this.departureLocationNames = departureLocationNames; // Assign departure location names to component property
       this.cd.detectChanges();  // Manually trigger change detection
-      await this.initializeMaps();  // Initialize the maps here
+      await this.initializeMaps();
     } catch (error) {
       console.error('Error getting carpools:', error);
       // Handle errors
     }
-  }
 
-  private async getLocationName(location: L.LatLng): Promise<string> {
+}  private async getLocationName(location: L.LatLng): Promise<string> {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?lat=${location.lat}&lon=${location.lng}&format=json`;
       const response = await fetch(url);
@@ -119,6 +150,38 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       throw error;
     }
   }
+  private async fetchLocationNames(): Promise<void> {
+    try {
+      console.log('Fetching location names for carpoolings:', this.carpoolings);
+
+      // Create a temporary map or object to store location names
+      const locationNamesMap = new Map<number, { departure: string, destination: string }>();
+
+      for (const carpool of this.carpoolings) {
+        const departureLocation = L.latLng(parseFloat(carpool.latitudeDeparture), parseFloat(carpool.longitudeDeparture));
+        const destinationLocation = L.latLng(parseFloat(carpool.latitudeDestination), parseFloat(carpool.longitudeDestination));
+
+        const departureName = await this.getLocationName(departureLocation);
+        const destinationName = await this.getLocationName(destinationLocation);
+
+        // Store location names in the temporary map
+        locationNamesMap.set(carpool.carpoolingID, { departure: departureName, destination: destinationName });
+      }
+
+      // Update the departureLocationNames and destinationLocationNames arrays
+      this.departureLocationNames = [];
+      this.destinationLocationNames = [];
+      locationNamesMap.forEach(value => {
+        this.departureLocationNames.push(value.departure);
+        this.destinationLocationNames.push(value.destination);
+      });
+    } catch (error) {
+      console.error('Error fetching location names:', error);
+    }
+  }
+
+
+
 
 
   addBooking(carpoolingID: number): void {
@@ -156,5 +219,20 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
         console.error('Error deleting carpooling:', error);
       }
     );
+  }
+  async filterCarpoolsByType(): Promise<void> {
+    if (this.selectedCarpoolingType) {
+      try {
+        const filteredCarpools = await this.carpoolingService.findByCarpoolingType(this.selectedCarpoolingType).toPromise();
+        this.carpoolings = filteredCarpools;
+        await this.fetchLocationNames();
+        await this.initializeMaps();
+      } catch (error) {
+        console.error('Error filtering carpools by type:', error);
+      }
+    } else {
+      // If no type is selected, reset the list to all carpools
+      this.getCarpools();
+    }
   }
 }

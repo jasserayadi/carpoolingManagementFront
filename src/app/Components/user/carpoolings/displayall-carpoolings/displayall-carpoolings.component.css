@@ -7,6 +7,10 @@
   padding: 5px; /* Add padding to table cells */
 }
 
+button {
+  margin: 0 10px 10px 0; /* This adds a 10px space to the right and bottom of each button */
+  border-radius: 12px; /* This makes the buttons rounder */
+}
 
 
 .carpool-table th,
@@ -61,4 +65,15 @@ h2 {
 #map {
   height: 400px; /* Adjust height as needed */
   width: 100%;   /* Adjust width as needed */
+}
+.filter-container {
+  display: block; /* Ensure the container is displayed */
+  margin-bottom: 20px;
+  /* Add any other necessary styles */
+}
+
+/* Ensure the label and select elements are visible */
+.filter-container label,
+.filter-container select {
+  display: inline-block;
 }

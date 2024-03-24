@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Carpooling} from "../entity/Carpooling";
 import {Booking} from "../entity/Booking";
+import {CarpoolingType} from "../entity/CarpoolingType";
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,9 @@ export class CarpoolingService {
   findCarpooling(carpoolingId: number): Observable<Carpooling> {
     return this.http.get<Carpooling>(`/findCarpooling/${carpoolingId}`);
   }
-
-
+  findByCarpoolingType(carpoolingType: CarpoolingType): Observable<Carpooling[]> {
+    const url = `${this.baseUrl}/findByCarpoolingType/${carpoolingType}`;
+    return this.http.get<Carpooling[]>(url);
+  }
 
 }

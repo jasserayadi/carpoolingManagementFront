@@ -1,55 +1,66 @@
-<h2>List of Carpools</h2>
+<h2>the list Carpools</h2>
+<!-- Add a dropdown menu for selecting carpooling type -->
+<div class="filter-container">
+  <label for="carpoolingType">Filter by Carpooling Type:</label>
+  <select id="carpoolingType" [(ngModel)]="selectedCarpoolingType" (change)="filterCarpoolsByType()">
+    <option value="">All</option>
+    <option *ngFor="let type of carpoolingTypes" [value]="type">{{ type }}</option>
+  </select>
+</div>
+<div class="filter-container">
+  <label for="departurePlace">Search by Departure Place:</label>
+  <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()">
+</div>
 <style>
   h2 {
     color: #dc3545;
     text-align: center;
   }
   .carpool-map {
-    height: 200px; /* Adjust the height as needed */
+    height: 500px; /* Adjust the height as needed */
+    width: 1120px;
     margin-bottom: 20px;
+  }
+  .filter-container {
+    margin-bottom: 20px;
+  }
+  .filter-container label {
+    margin-right: 10px;
+  }
+  .carpool-container {
+    display: flex;
+    flex-direction: column; /* This will stack the carpoolings vertically */
+    align-items: center; /* This will center the carpoolings horizontally */
+  }
+  .carpool-card {
+    width: 80%; /* Adjust this to change the width of the carpoolings */
+    margin-bottom: 20px; /* This will add some space between the carpoolings */
+    flex: 1 0 auto; /* Allow each card to grow and shrink as needed */
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+  button {
+    margin: 0 10px 10px 0; /* This adds a 10px space to the right and bottom of each button */
+    border-radius: 12px; /* This makes the buttons rounder */
   }
 </style>
 
-<table class="carpool-table">
-  <thead>
-  <tr>
-    <th>Departure Time</th>
-    <th>Longitude Departure</th>
-    <th>Latitude Destination</th>
-    <th>Latitude Departure</th>
-    <th>Longitude Destination</th>
-    <th>Available Seats</th>
-    <th>Cost Per Seat</th>
-    <th>Day</th>
-    <th>Time</th>
-    <th>Carpooling Type</th>
-    <th>Registration Number</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let carpool of carpoolings">
-    <td>{{ carpool.departureTime }}</td>
-    <td>{{ carpool.longitudeDeparture }}</td>
-    <td>{{ carpool.latitudeDestination }}</td>
-    <td>{{ carpool.latitudeDeparture }}</td>
-    <td>{{ carpool.longitudeDestination }}</td>
-    <td>{{ carpool.availableSeats }}</td>
-    <td>{{ carpool.costPerSeat }}</td>
-    <td>{{ carpool.day }}</td>
-    <td>{{ carpool.time }}</td>
-    <td>{{ carpool.carpoolingType }}</td>
-    <td>{{ carpool.registrationNumber }}</td>
-    <td>
-      <input type="number" [(ngModel)]="newBooking.nb" name="nb" placeholder="Enter nb">
-      <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
-      <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
-      <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
-      <!-- Map for Departure and Destination Locations -->
-      <div id="map_{{ carpool.carpoolingID }}" class="carpool-map"></div>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
+<div class="carpool-container">
+  <div class="carpool-card" *ngFor="let carpool of carpoolings">
+    <p><strong>Departure Time:</strong> {{ carpool.departureTime }}</p>
+    <p><strong>Available Seats:</strong> {{ carpool.availableSeats }}</p>
+    <p><strong>Cost Per Seat:</strong> {{ carpool.costPerSeat }}</p>
+    <p><strong>Day:</strong> {{ carpool.day }}</p>
+    <p><strong>Time:</strong> {{ carpool.time }}</p>
+    <p><strong>Carpooling Type:</strong> {{ carpool.carpoolingType }}</p>
+    <p><strong>Registration Number:</strong> {{ carpool.registrationNumber }}</p>
+    <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
+    <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
+    <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
+    <!-- Map for Departure and Destination Locations -->
+    <div id="map_{{ carpool.carpoolingID }}" class="carpool-map"></div>
+  </div>
+</div>
 <app-all-template-front></app-all-template-front>
