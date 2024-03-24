@@ -5,6 +5,14 @@ import { BookingService } from '../../../../Services/booking.service';
 import { Booking } from '../../../../entity/Booking';
 import * as L from 'leaflet';
 import {CarpoolingType} from "../../../../entity/CarpoolingType";
+import 'leaflet-routing-machine';
+import 'leaflet-control-geocoder';
+declare module 'leaflet' {
+  namespace Routing {
+    function control(options?: any): any;
+  }
+}
+
 
 @Component({
   selector: 'app-displayall-carpoolings',
@@ -109,11 +117,37 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
           .bindPopup('Destination Location')
           .bindTooltip(destinationName, { direction: 'top', permanent: true })  // Ensure destination name is bound
           .openTooltip();
+
+        // Create a routing control
+        const routingControl = L.Routing.control({
+          waypoints: [
+            L.latLng(latitudeDeparture, longitudeDeparture),
+            L.latLng(latitudeDestination, longitudeDestination)
+          ],  routeWhileDragging: true,
+          geocoder: (<any>L.Control).Geocoder.nominatim(),
+          router: new L.Routing.OSRMv1({
+            serviceUrl: 'https://router.project-osrm.org/route/v1'
+          }),
+          formatter: new L.Routing.Formatter(),
+          createControl: false  // Prevent the creation of the control panel
+        });
+
+        // Add the routing control to the map
+        routingControl.addTo(map);
+
+        // Remove the route instructions control from the map
+        const routeInstructionsContainer = routingControl.getContainer();
+        if (routeInstructionsContainer) {
+          map.removeControl(routeInstructionsContainer);
+        }
       }
     } catch (error) {
       console.error('Error initializing maps:', error);
     }
   }
+
+
+
 
 
   async getCarpools(): Promise<void> {
@@ -200,6 +234,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
           console.error('Error adding booking:', error);
         }
       );
+
   }
 
   confirmDelete(carpoolingID: number): void {

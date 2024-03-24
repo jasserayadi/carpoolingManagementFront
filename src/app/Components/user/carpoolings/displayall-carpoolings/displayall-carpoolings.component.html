@@ -56,6 +56,7 @@
     <p><strong>Time:</strong> {{ carpool.time }}</p>
     <p><strong>Carpooling Type:</strong> {{ carpool.carpoolingType }}</p>
     <p><strong>Registration Number:</strong> {{ carpool.registrationNumber }}</p>
+    <input type="number" [(ngModel)]="newBooking.nb" name="nb" placeholder="Enter nb">
     <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
     <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
     <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
