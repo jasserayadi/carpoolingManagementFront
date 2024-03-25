@@ -7,6 +7,8 @@ import * as L from 'leaflet';
 import {CarpoolingType} from "../../../../entity/CarpoolingType";
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder';
+
+
 declare module 'leaflet' {
   namespace Routing {
     function control(options?: any): any;
@@ -20,7 +22,9 @@ declare module 'leaflet' {
   styleUrls: ['./displayall-carpoolings.component.css']
 })
 export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
-
+  myHeaders: Headers = new Headers();
+  raw: string;
+  requestOptions: RequestInit;
   carpoolings: Carpooling[] = [];
   newBooking: Booking = new Booking();
   departureLocationNames: string[] = [];
@@ -30,7 +34,29 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   carpoolingTypes: CarpoolingType[] = [CarpoolingType.SPECIFIC, CarpoolingType.DAILY]; // Replace with your actual carpooling types
   departureLocationFilter: string = '';
 
-  constructor(private carpoolingService: CarpoolingService, private bookingService: BookingService, private cd: ChangeDetectorRef) { }
+  constructor(private carpoolingService: CarpoolingService, private bookingService: BookingService, private cd: ChangeDetectorRef) {
+    this.myHeaders.append("Authorization", "App 795ecc02c9f2d49fe25924edd434f718-14affa4c-5bdd-4c88-b905-9eb13104e963");
+    this.myHeaders.append("Content-Type", "application/json");
+    this.myHeaders.append("Accept", "application/json");
+    this.raw = JSON.stringify({
+      "messages": [
+        {
+          "destinations": [{"to":"21693432084"}],
+          "from": "ServiceSMS",
+          "text": "Hello,\n\nThis is a test message from Infobip. Have a nice day!"
+        }
+      ]
+    });
+    this.requestOptions = {
+      method: "POST",
+      headers: this.myHeaders,
+      body: this.raw,
+      redirect: "follow"
+    };
+
+    this.sendMessage();
+
+  }
 
   ngOnInit(): void {
     this.getCarpools();
@@ -216,7 +242,34 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
 
 
 
+  sendMessage(): void {
+    const myHeaders: Headers = new Headers();
+    myHeaders.append("Authorization", "App 795ecc02c9f2d49fe25924edd434f718-14affa4c-5bdd-4c88-b905-9eb13104e963");
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "application/json");
 
+    const raw: string = JSON.stringify({
+      "messages": [
+        {
+          "destinations": [{"to":"21693432084"}],
+          "from": "ServiceSMS",
+          "text": "Hellooo,\n\nThis is a test message from Infobip. Have a nice day!"
+        }
+      ]
+    });
+
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("https://43nzjn.api.infobip.com/sms/2/text/advanced", requestOptions)
+      .then((response: Response) => response.text())
+      .then((result: string) => console.log(result))
+      .catch((error: any) => console.error(error));
+  }
 
   addBooking(carpoolingID: number): void {
     const newBooking = new Booking();
@@ -225,6 +278,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
     this.bookingService.addBooking(newBooking, carpoolingID)
       .subscribe(
         () => {
+          this.sendMessage()
           // Handle successful booking creation
           alert('Booking successfully added!');
         },
