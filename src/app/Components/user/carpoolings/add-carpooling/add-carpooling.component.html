@@ -53,10 +53,6 @@
   <span *ngIf="carpoolingForm.get('registrationNumber')?.invalid && carpoolingForm.get('registrationNumber')?.touched">Invalid</span>
 
   <!-- Additional form fields for longitude and latitude -->
-  <input id="longitudeDeparture" type="number" formControlName="longitudeDeparture" placeholder="Longitude Departure">
-  <input id="latitudeDeparture" type="number" formControlName="latitudeDeparture" placeholder="Latitude Departure">
-  <input id="longitudeDestination" type="number" formControlName="longitudeDestination" placeholder="Longitude Destination">
-  <input id="latitudeDestination" type="number" formControlName="latitudeDestination" placeholder="Latitude Destination">
 
   <button type="submit">Add Carpooling</button>
 </form>

@@ -21,6 +21,10 @@ import { DisplayallCarpoolingsComponent } from './Components/user/carpoolings/di
 import { AddBookingComponent } from './Components/user/Booking/add-booking/add-booking.component';
 import { DisplayAllBookingComponent } from './Components/user/Booking/display-all-booking/display-all-booking.component';
 import { UpdateCarpoolingComponent } from './Components/user/carpoolings/update-carpooling/update-carpooling.component';
+import { DisplayAllCarpoolingsComponent } from './Components/admin/carpooling/display-all-carpoolings/display-all-carpoolings.component';
+import { AdminDisplayAllBookingComponent } from './Components/admin/booking/admin-display-all-booking/admin-display-all-booking.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -42,6 +46,9 @@ import { UpdateCarpoolingComponent } from './Components/user/carpoolings/update-
     AddBookingComponent,
     DisplayAllBookingComponent,
     UpdateCarpoolingComponent,
+    DisplayAllCarpoolingsComponent,
+    AdminDisplayAllBookingComponent,
+
 
   ],
   imports: [
@@ -51,7 +58,8 @@ import { UpdateCarpoolingComponent } from './Components/user/carpoolings/update-
     ReactiveFormsModule,
 
     FormsModule,
-
+    NgxChartsModule,
+    BrowserAnimationsModule
 
 
   ],

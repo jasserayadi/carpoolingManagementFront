@@ -11,11 +11,19 @@ import {DisplayallCarpoolingsComponent} from "./Components/user/carpoolings/disp
 import {AddBookingComponent} from "./Components/user/Booking/add-booking/add-booking.component";
 import {DisplayAllBookingComponent} from "./Components/user/Booking/display-all-booking/display-all-booking.component";
 import {UpdateCarpoolingComponent} from "./Components/user/carpoolings/update-carpooling/update-carpooling.component";
+import {
+  DisplayAllCarpoolingsComponent
+} from "./Components/admin/carpooling/display-all-carpoolings/display-all-carpoolings.component";
+import {
+  AdminDisplayAllBookingComponent
+} from "./Components/admin/booking/admin-display-all-booking/admin-display-all-booking.component";
 
 const routes: Routes = [
 
-  {
-    path: "",
+
+  {path: "HomeAdmin",
+    component: HomeBackComponent},
+  {path: "",
     component: AllTemplateFrontComponent,
     children: [
       {
@@ -32,11 +40,12 @@ const routes: Routes = [
     component: AllTemplateBackComponent,
     children: [
       {
-        path: "home",
-        component: HomeBackComponent,children:[ {
-          path: "addBooking",
-          component: AddBookingComponent
-        } ]
+        path: "allCarpiilingsAdmin",
+        component:DisplayAllCarpoolingsComponent,
+      },
+      {
+        path: "AdminBooking",
+        component:AdminDisplayAllBookingComponent,
       }
     ]
   },

@@ -16,6 +16,9 @@ export class Carpooling {
   time!:String;
   carpoolingType!: CarpoolingType; // Enum type
   registrationNumber!: number;
+  bookings!: Booking[];
+
+
   //user!: User; // Assuming you have a User class
-  bookings!: Booking[]; // Assuming you have a Booking class
+ // Assuming you have a Booking class
 }

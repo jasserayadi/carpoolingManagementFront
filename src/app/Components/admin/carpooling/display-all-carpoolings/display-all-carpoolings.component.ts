@@ -1,27 +1,24 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { CarpoolingService } from '../../../../Services/carpooling.service';
-import { Carpooling } from '../../../../entity/Carpooling';
-import { BookingService } from '../../../../Services/booking.service';
-import { Booking } from '../../../../entity/Booking';
-import * as L from 'leaflet';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Carpooling} from "../../../../entity/Carpooling";
+import {Booking} from "../../../../entity/Booking";
 import {CarpoolingType} from "../../../../entity/CarpoolingType";
+import {CarpoolingService} from "../../../../Services/carpooling.service";
+import {BookingService} from "../../../../Services/booking.service";
+
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder';
-
-
+import * as L from "leaflet";
 declare module 'leaflet' {
   namespace Routing {
     function control(options?: any): any;
   }
 }
-
-
 @Component({
-  selector: 'app-displayall-carpoolings',
-  templateUrl: './displayall-carpoolings.component.html',
-  styleUrls: ['./displayall-carpoolings.component.css']
+  selector: 'app-display-all-carpoolings',
+  templateUrl: './display-all-carpoolings.component.html',
+  styleUrls: ['./display-all-carpoolings.component.css']
 })
-export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
+export class DisplayAllCarpoolingsComponent implements OnInit, AfterViewInit {
   myHeaders: Headers = new Headers();
   raw: string;
   requestOptions: RequestInit;
@@ -33,10 +30,18 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
 // Inside your component class
   carpoolingTypes: CarpoolingType[] = [CarpoolingType.SPECIFIC, CarpoolingType.DAILY]; // Replace with your actual carpooling types
   departureLocationFilter: string = '';
-  destinationLocationFilter:string='';
-  departureTime: string;
-  carpools: Carpooling[];
-  searchDepartureTime: string;
+
+  // Chart options
+
+  daily :number=0;
+  specifics:number=0;
+  chartData: any[];
+  colorScheme = { domain: ['#5AA454', '#C7B42C'] };
+  showXAxis = true;
+  showYAxis = true;
+  showLegend = true;
+  showXAxisLabel = true;
+  showYAxisLabel = true;
   constructor(private carpoolingService: CarpoolingService, private bookingService: BookingService, private cd: ChangeDetectorRef) {
     this.myHeaders.append("Authorization", "App 795ecc02c9f2d49fe25924edd434f718-14affa4c-5bdd-4c88-b905-9eb13104e963");
     this.myHeaders.append("Content-Type", "application/json");
@@ -44,9 +49,9 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
     this.raw = JSON.stringify({
       "messages": [
         {
-          "destinations": [{"to":"2169632084"}],
+          "destinations": [{"to": "21693432084"}],
           "from": "ServiceSMS",
-          "text": "Hello,\n\nThis is a test message from Innfobip. Have a nice day!"
+          "text": "Hello,\n\nThis is a test message from Infobip. Have a nice day!"
         }
       ]
     });
@@ -68,6 +73,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // No need to initialize maps here
   }
+
   filterCarpoolsByDeparture(): void {
     const filterValue = this.departureLocationFilter.toLowerCase().trim();
     if (filterValue === '') {
@@ -89,7 +95,6 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       this.initializeMaps();
     }
   }
-
 
 
   async initializeMaps(): Promise<void> {
@@ -140,17 +145,17 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
         });
 
         // Add markers with custom icons and tooltips
-        L.marker([latitudeDeparture, longitudeDeparture], { icon: depIcon })
+        L.marker([latitudeDeparture, longitudeDeparture], {icon: depIcon})
           .addTo(map)
           .bindPopup('Departure Location')
-          .bindTooltip(departureName, { direction: 'top', permanent: true })
+          .bindTooltip(departureName, {direction: 'top', permanent: true})
           .openTooltip();
 
         // Add destination marker with custom icon and tooltip
-        L.marker([latitudeDestination, longitudeDestination], { icon: destIcon })
+        L.marker([latitudeDestination, longitudeDestination], {icon: destIcon})
           .addTo(map)
           .bindPopup('Destination Location')
-          .bindTooltip(destinationName, { direction: 'top', permanent: true })  // Ensure destination name is bound
+          .bindTooltip(destinationName, {direction: 'top', permanent: true})  // Ensure destination name is bound
           .openTooltip();
 
         // Create a routing control
@@ -158,15 +163,13 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
           waypoints: [
             L.latLng(latitudeDeparture, longitudeDeparture),
             L.latLng(latitudeDestination, longitudeDestination)
-          ],
-          routeWhileDragging: false,
+          ], routeWhileDragging: true,
           geocoder: (<any>L.Control).Geocoder.nominatim(),
           router: new L.Routing.OSRMv1({
             serviceUrl: 'https://router.project-osrm.org/route/v1'
           }),
           formatter: new L.Routing.Formatter(),
-          createControl: false , // Prevent the creation of the control panel
-          addWaypoints: false
+          createControl: false  // Prevent the creation of the control panel
         });
 
         // Add the routing control to the map
@@ -184,19 +187,25 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   }
 
 
-
-
-
-
   async getCarpools(): Promise<void> {
     try {
       const data = await this.carpoolingService.getAllCarpooling().toPromise();
+
       const departureLocationNames: string[] = []; // Array to store departure location names
       for (const carpool of data) {
         const departureLocation = L.latLng(parseFloat(carpool.latitudeDeparture), parseFloat(carpool.longitudeDeparture));
         // Fetch and store departure location name
         departureLocationNames.push(await this.getLocationName(departureLocation));
+        if (carpool.carpoolingType === CarpoolingType.DAILY) {
+          this.daily++;
+        } else if (carpool.carpoolingType === CarpoolingType.SPECIFIC) {
+          this.specifics++;
+        }
       }
+      this.chartData = [
+        { name: 'DAILY', value: this.daily },
+        { name: 'SPECIFIC', value: this.specifics }
+      ];
       this.carpoolings = data;
       this.departureLocationNames = departureLocationNames; // Assign departure location names to component property
       this.cd.detectChanges();  // Manually trigger change detection
@@ -206,10 +215,21 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       // Handle errors
     }
 
-}  private async getLocationName(location: L.LatLng): Promise<string> {
+  }
+  updateChartData(): void {
+    this.chartData = [
+      { name: 'DAILY', value: this.daily },
+      { name: 'SPECIFIC', value: this.specifics }
+    ];
+  }
+  private async getLocationName(location: L.LatLng): Promise<string> {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${location.lat}&lon=${location.lng}&format=json`;
+
     try {
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${location.lat}&lon=${location.lng}&format=json`;
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch location name');
+      }
       const data = await response.json();
 
       if (data.display_name) {
@@ -219,9 +239,12 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       }
     } catch (error) {
       console.error('Error fetching location name:', error);
-      throw error;
+      // You can implement retry logic here if needed
+      throw error; // Re-throw the error to propagate it further
     }
   }
+
+
   private async fetchLocationNames(): Promise<void> {
     try {
       console.log('Fetching location names for carpoolings:', this.carpoolings);
@@ -237,7 +260,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
         const destinationName = await this.getLocationName(destinationLocation);
 
         // Store location names in the temporary map
-        locationNamesMap.set(carpool.carpoolingID, { departure: departureName, destination: destinationName });
+        locationNamesMap.set(carpool.carpoolingID, {departure: departureName, destination: destinationName});
       }
 
       // Update the departureLocationNames and destinationLocationNames arrays
@@ -253,7 +276,6 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   }
 
 
-
   sendMessage(): void {
     const myHeaders: Headers = new Headers();
     myHeaders.append("Authorization", "App 795ecc02c9f2d49fe25924edd434f718-14affa4c-5bdd-4c88-b905-9eb13104e963");
@@ -263,9 +285,9 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
     const raw: string = JSON.stringify({
       "messages": [
         {
-          "destinations": [{"to":"21693432084"}],
+          "destinations": [{"to": "21693432084"}],
           "from": "ServiceSMS",
-          "text": "Hellooo,\n\nThis is a test message from Infobip. Have a nice day!"
+          "text": "Hellpooo,\n\nThis is a test message from Infobip. Have a nice day!"
         }
       ]
     });
@@ -286,7 +308,6 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   addBooking(carpoolingID: number): void {
     const newBooking = new Booking();
     newBooking.nb = this.newBooking.nb;
-
 
     this.bookingService.addBooking(newBooking, carpoolingID)
       .subscribe(
@@ -322,6 +343,7 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
   async filterCarpoolsByType(): Promise<void> {
     if (this.selectedCarpoolingType) {
       try {
@@ -337,15 +359,6 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       this.getCarpools();
     }
   }
-  search(): void {
-    this.carpoolingService.findByDepartureTime(this.searchDepartureTime)
-      .subscribe({
-        next: (data) => {
-          this.carpools = data;
-        },
-        error: (error) => {
-          console.error('Error:', error);
-        }
-      });
-  }
-  }
+
+
+}

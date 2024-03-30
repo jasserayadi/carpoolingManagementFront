@@ -12,10 +12,6 @@
     <label for="departurePlace">Search by Departure Place:</label>
     <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()">
   </div>
-  <div>
-    <label for="departureTime">Departure Time:</label>
-    <input type="datetime-local" id="departureTime" [(ngModel)]="departureTime" (change)="search()">
-  </div>
 </div>
 
 <style>
@@ -26,7 +22,7 @@
   }
   .carpool-map {
     height: 500px; /* Adjust the height as needed */
-    width: 1120px;
+    width: 920px;
     margin-bottom: 20px;
   }
   .filter-container {
@@ -39,7 +35,6 @@
     display: flex;
     flex-direction: column; /* This will stack the carpoolings vertically */
     align-items: center; /* This will center the carpoolings horizontally */
-
   }
   .carpool-card {
     width: 80%; /* Adjust this to change the width of the carpoolings */
@@ -52,38 +47,27 @@
   }
   button {
     margin: 0 10px 10px 0; /* This adds a 10px space to the right and bottom of each button */
-    border-radius: 12px; /* This makes the buttons rounder */
-    background-color: #dc3545;
-    color:white;
-
+    border-radius: 6px; /* This makes the buttons rounder */
+    background: #191C24;
+    color: #6C7293;
   }
 </style>
 
 <div class="carpool-container">
   <div class="carpool-card" *ngFor="let carpool of carpoolings">
-    <ng-container *ngIf="carpool.departureTime !== null">
-      <p><strong>Departure Time:</strong> {{ carpool.departureTime }}</p>
-    </ng-container>
-    <p><strong>Available Seats:</strong>
-      <ng-container *ngIf="carpool.availableSeats === 0; else seatsAvailable">
-        No seats left
-      </ng-container>
-      <ng-template #seatsAvailable>
-        {{ carpool.availableSeats }}
-      </ng-template>
-    </p>
-    <p *ngIf="carpool.day !== null"><strong>Day:</strong> {{ carpool.day }}</p>
-    <p *ngIf="carpool.time !== null"><strong>Time:</strong> {{ carpool.time }}</p>
+    <p><strong>Departure Time:</strong> {{ carpool.departureTime }}</p>
+    <p><strong>Available Seats:</strong> {{ carpool.availableSeats }}</p>
+    <p><strong>Cost Per Seat:</strong> {{ carpool.costPerSeat }}</p>
+    <p><strong>Day:</strong> {{ carpool.day }}</p>
+    <p><strong>Time:</strong> {{ carpool.time }}</p>
     <p><strong>Carpooling Type:</strong> {{ carpool.carpoolingType }}</p>
     <p><strong>Registration Number:</strong> {{ carpool.registrationNumber }}</p>
-    <p><strong>price per seat:</strong> {{ carpool.costPerSeat }}</p>
-    <input type="number" [(ngModel)]="newBooking.nb" name="nb" placeholder="Enter nb">
-    <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
-    <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
-    <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
-    <!-- Map for Departure and Destination Locations -->
+     <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
+
     <div id="map_{{ carpool.carpoolingID }}" class="carpool-map"></div>
   </div>
 </div>
-
-<app-all-template-front></app-all-template-front>
+<div>
+  <p>DAILY Carpoolings: {{this.daily }}</p>
+  <p>SPECIFIC Carpoolings: {{ this.specifics }}</p>
+</div>

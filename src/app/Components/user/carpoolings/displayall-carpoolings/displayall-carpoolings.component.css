@@ -1,3 +1,16 @@
+.filter-wrapper {
+  display: flex; /* Use flexbox layout */
+  justify-content: space-between; /* Align items with space between them */
+  margin-bottom: 100px;
+}
+
+.filter-container {
+  flex: 1; /* Each filter container takes up equal space */
+  margin-right: 20px; /* Adjust as needed */
+}
+.filter-wrapper {
+  margin-top: 50px; /* Adjust margin top as needed */
+}
 
 
 #map {
@@ -23,6 +36,7 @@ h2 {
   font-weight: 700;
   color: #dc3545;
   text-align: center;
+  margin-top: 100px;
 }
 
 .filter-container {

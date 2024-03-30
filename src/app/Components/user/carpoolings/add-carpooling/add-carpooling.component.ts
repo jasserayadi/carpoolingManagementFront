@@ -33,9 +33,20 @@ export class AddCarpoolingComponent implements OnInit, AfterViewInit {
       latitudeDeparture: [null],
       longitudeDestination: [null],
       latitudeDestination: [null]
-    });
+    }, { validators: this.departureTimeValidator });
   }
-
+  departureTimeValidator(group: FormGroup) {
+    const departureTime = group.get('departureTime').value;
+    if (departureTime !== null) { // Validate only if departureTime is not null
+      const now = new Date();
+      if (new Date(departureTime) <= now) {
+        group.get('departureTime').setErrors({ departureTimeInvalid: true }); // Set error if departure time is invalid
+      } else {
+        group.get('departureTime').setErrors(null); // Clear error if departure time is valid
+      }
+    }
+    return null; // Return null to satisfy Angular validator interface
+  }
   ngAfterViewInit(): void {
     this.initializeMap();
   }
@@ -50,8 +61,24 @@ export class AddCarpoolingComponent implements OnInit, AfterViewInit {
     });
 
     this.map.on('click', (e: any) => this.onMapClick(e));
-    const geocoder1 = (<any>L.Control).geocoder().addTo(this.map);
+
+    const geocoder = (<any>L.Control).geocoder({
+      defaultMarkGeocode: false
+    }).addTo(this.map);
+
+    geocoder.on('markgeocode', (e: any) => {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]);
+      this.map.fitBounds(poly.getBounds());
+    });
   }
+
+
 
   async onMapClick(e: any) {
     if (!this.departureMarker) {
@@ -155,4 +182,5 @@ export class AddCarpoolingComponent implements OnInit, AfterViewInit {
       alert('Please fill in all required fields.');
     }
   }
+
 }

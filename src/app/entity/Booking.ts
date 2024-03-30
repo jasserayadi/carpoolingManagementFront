@@ -7,5 +7,7 @@ export class Booking {
   nb!: number;
   carpooling!: Carpooling; // Assuming you have a Carpooling class
   //user: User; // Assuming you have a User class
-  feedBack!: FeedBack; // Assuming you have a FeedBack class
+  feedBack!: FeedBack;
+// Assuming you have a FeedBack class
+
 }

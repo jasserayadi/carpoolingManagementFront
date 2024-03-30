@@ -5,8 +5,8 @@
       <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
         <i class="fa fa-chart-line fa-3x text-primary"></i>
         <div class="ms-3">
-          <p class="mb-2">Carpool reservation revenues</p>
-          <h6 class="mb-0">$1234</h6>
+          <p class="mb-2">Total Booking Number</p>
+          <h6 class="mb-0">{{ totalBookingNumber }}</h6>
         </div>
       </div>
     </div>
@@ -51,18 +51,39 @@
           <h6 class="mb-0">Carpooling by location</h6>
           <a href="">Show All</a>
         </div>
-        <canvas id="worldwide-sales"></canvas>
+        <div style="height: 293px; width: 100%;">
+          <div id="map" style="height: 100%; width: 100%;"></div>
+        </div>
       </div>
     </div>
+
     <div class="col-sm-12 col-xl-6">
       <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Salse & Revenue</h6>
-          <a href="">Show All</a>
+          <h6 class="mb-0 text-white">Carpooling Type</h6>
+          <!-- Optionally add a link for showing all data -->
+          <!-- <a href="">Show All</a> -->
         </div>
-        <canvas id="salse-revenue"></canvas>
+        <!-- Replace this div with your chart container -->
+        <div class="chart-container">
+          <!-- Your chart content will go here -->
+          <!-- For example, you can use a canvas for chart rendering -->
+          <!-- <canvas id="salse-revenue"></canvas> -->
+          <ngx-charts-bar-vertical
+            [view]="[400, 300]"
+            [results]="chartData"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="showLegend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            xAxisLabel="Carpooling Type"
+            yAxisLabel="Count">
+          </ngx-charts-bar-vertical>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 <!-- Sales Chart End -->
@@ -72,70 +93,73 @@
 <div class="container-fluid pt-4 px-4">
   <div class="bg-secondary text-center rounded p-4">
     <div class="d-flex align-items-center justify-content-between mb-4">
-      <h6 class="mb-0">Recent collocations</h6>
-      <a href="">Show All</a>
+      <h6 class="mb-0">Recent booking</h6>
+      <a href="http://localhost:4200/admin/AdminBooking">Show All</a>
     </div>
     <div class="table-responsive">
-      <table class="table text-start align-middle table-bordered table-hover mb-0">
-        <thead>
-        <tr class="text-white">
-          <th scope="col"><input class="form-check-input" type="checkbox"></th>
-          <th scope="col">Starting date</th>
-          <th scope="col">Expiry date</th>
-          <th scope="col">Customer</th>
-          <th scope="col">rent Amount</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td><input class="form-check-input" type="checkbox"></td>
-          <td>01 Jan 2045</td>
-          <td>INV-0123</td>
-          <td>Jhon Doe</td>
-          <td>$123</td>
-          <td>Paid</td>
-          <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-        </tr>
-        <tr>
-          <td><input class="form-check-input" type="checkbox"></td>
-          <td>01 Jan 2045</td>
-          <td>INV-0123</td>
-          <td>Jhon Doe</td>
-          <td>$123</td>
-          <td>Paid</td>
-          <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-        </tr>
-        <tr>
-          <td><input class="form-check-input" type="checkbox"></td>
-          <td>01 Jan 2045</td>
-          <td>INV-0123</td>
-          <td>Jhon Doe</td>
-          <td>$123</td>
-          <td>Paid</td>
-          <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-        </tr>
-        <tr>
-          <td><input class="form-check-input" type="checkbox"></td>
-          <td>01 Jan 2045</td>
-          <td>INV-0123</td>
-          <td>Jhon Doe</td>
-          <td>$123</td>
-          <td>Paid</td>
-          <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-        </tr>
-        <tr>
-          <td><input class="form-check-input" type="checkbox"></td>
-          <td>01 Jan 2045</td>
-          <td>INV-0123</td>
-          <td>Jhon Doe</td>
-          <td>$123</td>
-          <td>Paid</td>
-          <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-        </tr>
-        </tbody>
-      </table>
+
+      <div class="container">
+        <div class="content-wrapper">
+          <div *ngIf="bookings" class="bookings-table">
+            <h2>Bookings</h2>
+            <style>
+              h2 {
+                color: #EB1616;
+                text-align: center;
+              }
+              /* Add style for button */
+              button.delete-button {
+                background-color: #343a40; /* Change to the desired color */
+                color: white; /* Text color */
+                border: none; /* Remove border */
+                padding: 5px 10px; /* Adjust padding */
+                border-radius: 5px; /* Optional: Add border radius */
+                cursor: pointer; /* Change cursor on hover */
+              }
+              /* Style for button hover effect */
+              button.delete-button:hover {
+                background-color: #EB1616; /* Change to a darker shade for hover effect */
+              }
+              /* Add spacing between rows */
+              table {
+                border-collapse: collapse;
+                width: 100%;
+              }
+              tr {
+                border-bottom: 1px solid #dddddd; /* Add a border between rows */
+              }
+              td, th {
+                padding: 8px; /* Adjust padding for cells */
+                text-align: left; /* Align text in cells */
+              }
+            </style>
+
+            <table>
+              <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Reserved seats</th>
+
+
+
+                <!-- Add other necessary fields -->
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Use ngFor with slice pipe to limit to first 5 bookings -->
+              <tr *ngFor="let booking of bookings.slice(0, 5)">
+                <td>{{booking.bookingID}}</td>
+                <td>{{booking.nb}}</td>
+                  <!-- Add class to button and adjust click event -->
+                <td><button class="delete-button" (click)="confirmDelete(booking.bookingID)">Delete carpooling booking</button></td>
+                <!-- Add other necessary fields -->
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
