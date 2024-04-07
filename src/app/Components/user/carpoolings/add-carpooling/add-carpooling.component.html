@@ -19,7 +19,7 @@
   <span *ngIf="carpoolingForm.get('availableSeats')?.invalid && carpoolingForm.get('availableSeats')?.touched">Invalid</span>
 
   <label for="costPerSeat">Cost Per Seat:</label>
-  <input id="costPerSeat" type="number" formControlName="costPerSeat" placeholder="Enter costPerSeat">
+  <input id="costPerSeat" type="number" formControlName="costPerSeat" placeholder="Enter cost per seat in dinars">
   <span *ngIf="carpoolingForm.get('costPerSeat')?.invalid && carpoolingForm.get('costPerSeat')?.touched">Invalid</span>
 
   <label for="carpoolingType">Carpooling Type:</label>
@@ -55,4 +55,8 @@
   <!-- Additional form fields for longitude and latitude -->
 
   <button type="submit">Add Carpooling</button>
+  <a href="http://localhost:4200/home" style="color: red; font-size: larger;">back</a>
+
+
 </form>
+

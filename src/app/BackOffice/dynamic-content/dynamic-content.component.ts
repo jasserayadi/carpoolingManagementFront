@@ -5,7 +5,8 @@ import * as L from 'leaflet';
 import 'leaflet-control-geocoder';
 import {Carpooling} from "../../entity/Carpooling";
 import {CarpoolingType} from "../../entity/CarpoolingType";
-import {CarpoolingService} from "../../Services/carpooling.service"; // Import the geocoder control
+import {CarpoolingService} from "../../Services/carpooling.service";
+import {Day} from "../../entity/Day"; // Import the geocoder control
 
 @Component({
   selector: 'app-dynamic-content',
@@ -32,6 +33,12 @@ export class DynamicContentComponent implements AfterViewInit{
   daily :number=0;
   specifics:number=0;
   chartData: any[];
+  chartData2: any[];
+  MONDAY :number=0;
+  TUESDAY :number=0;
+  WEDNESDAY :number=0;
+  THURSDAY :number=0;
+  FRIDAY :number=0;
   colorScheme = { domain: ['#5AA454', '#C7B42C'] };
   showXAxis = true;
   showYAxis = true;
@@ -98,34 +105,71 @@ export class DynamicContentComponent implements AfterViewInit{
       const data = await this.carpoolingService.getAllCarpooling().toPromise();
 
       const departureLocationNames: string[] = []; // Array to store departure location names
+      let dailyCount = 0; // Initialize counter for daily carpools
+      const dayCounts = {
+        MONDAY: 0,
+        TUESDAY: 0,
+        WEDNESDAY: 0,
+        THURSDAY: 0,
+        FRIDAY: 0
+      };
+
       for (const carpool of data) {
         const departureLocation = L.latLng(parseFloat(carpool.latitudeDeparture), parseFloat(carpool.longitudeDeparture));
         // Fetch and store departure location name
         departureLocationNames.push(await this.getLocationName(departureLocation));
+
         if (carpool.carpoolingType === CarpoolingType.DAILY) {
-          this.daily++;
-        } else if (carpool.carpoolingType === CarpoolingType.SPECIFIC) {
-          this.specifics++;
+          dailyCount++;
+        }
+
+        if (carpool.day in dayCounts) {
+          dayCounts[carpool.day]++;
         }
       }
+
+      this.daily = dailyCount; // Set daily count
+      this.MONDAY = dayCounts.MONDAY; // Set count for Monday
+      this.TUESDAY = dayCounts.TUESDAY; // Set count for Tuesday
+      this.WEDNESDAY = dayCounts.WEDNESDAY; // Set count for Wednesday
+      this.THURSDAY = dayCounts.THURSDAY; // Set count for Thursday
+      this.FRIDAY = dayCounts.FRIDAY; // Set count for Friday
+
       this.chartData = [
         { name: 'DAILY', value: this.daily },
-        { name: 'SPECIFIC', value: this.specifics }
+        { name: 'SPECIFIC', value: data.length - this.daily } // Calculate specific carpools count
       ];
+
+      this.chartData2 = [
+        { name: 'MONDAY', value: this.MONDAY },
+        { name: 'TUESDAY', value: this.TUESDAY },
+        { name: 'WEDNESDAY', value: this.WEDNESDAY },
+        { name: 'THURSDAY', value: this.THURSDAY },
+        { name: 'FRIDAY', value: this.FRIDAY }
+      ];
+
       this.carpoolings = data;
       this.departureLocationNames = departureLocationNames; // Assign departure location names to component property
-      this.cd.detectChanges();  // Manually trigger change detection
+      this.cd.detectChanges(); // Manually trigger change detection
       await this.initializeMaps();
     } catch (error) {
       console.error('Error getting carpools:', error);
       // Handle errors
     }
-
   }
   updateChartData(): void {
     this.chartData = [
       { name: 'DAILY', value: this.daily },
       { name: 'SPECIFIC', value: this.specifics }
+    ];
+  }
+  updateChartData2(): void {
+    this.chartData2 = [
+      { name: 'MONDAY', value: this.daily },
+      { name: 'TUESDAY', value: this.specifics },
+      { name: 'WEDNESDAY', value: this.specifics },
+      { name: 'THURSDAY', value: this.specifics },
+      { name: 'FRIDAY', value: this.specifics }
     ];
   }
   private async getLocationName(location: L.LatLng): Promise<string> {

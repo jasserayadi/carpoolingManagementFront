@@ -5,7 +5,7 @@ import { HomeBackComponent } from "./BackOffice/home-back/home-back.component";
 import { SidebarComponent } from "./BackOffice/sidebar/sidebar.component";
 import { AllTemplateFrontComponent } from "./FrontOffice/all-template-front/all-template-front.component";
 import { HomeFrontComponent } from "./FrontOffice/home-front/home-front.component";
-import {FeedbackComponent} from "./Components/admin/feedback/feedback.component";
+import {FeedbackComponent} from "./Components/user/feedback/feedback.component";
 import {AddCarpoolingComponent} from "./Components/user/carpoolings/add-carpooling/add-carpooling.component";
 import {DisplayallCarpoolingsComponent} from "./Components/user/carpoolings/displayall-carpoolings/displayall-carpoolings.component";
 import {AddBookingComponent} from "./Components/user/Booking/add-booking/add-booking.component";
@@ -20,7 +20,10 @@ import {
 
 const routes: Routes = [
 
-
+  {
+    path: "addFeedback",
+    component:FeedbackComponent
+  },
   {path: "HomeAdmin",
     component: HomeBackComponent},
   {path: "",
@@ -74,6 +77,7 @@ const routes: Routes = [
 
     ]
   }
+
 
 
 ];

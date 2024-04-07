@@ -3,20 +3,33 @@
 <div class="filter-wrapper">
   <div class="filter-container">
     <label for="carpoolingType">Filter by Carpooling Type:</label>
-    <select id="carpoolingType" [(ngModel)]="selectedCarpoolingType" (change)="filterCarpoolsByType()">
+    <select id="carpoolingType" [(ngModel)]="selectedCarpoolingType" (change)="filterCarpoolsByType()" >
       <option value="">All</option>
       <option *ngFor="let type of carpoolingTypes" [value]="type">{{ type }}</option>
     </select>
   </div>
   <div class="filter-container">
-    <label for="departurePlace">Search by Departure Place:</label>
-    <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()">
+    <label for="departurePlace"></label>
+    <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()" placeholder="Search by Departure Place:">
   </div>
-  <div>
-    <label for="departureTime">Departure Time:</label>
-    <input type="datetime-local" id="departureTime" [(ngModel)]="departureTime" (change)="search()">
+
+  <div class="filter-container">
+    <label for="day">Select Day:</label>
+    <select id="day" [(ngModel)]="selectedDay" (change)="filterByDay()" >
+      <option value="">All</option>
+      <option value="MONDAY">Monday</option>
+      <option value="TUESDAY">Tuesday</option>
+      <option value="WEDNESDAY">Wednesday</option>
+      <option value="THURSDAY">Thursday</option>
+      <option value="FRIDAY">Friday</option>
+      <!-- Add other days as needed -->
+    </select>
   </div>
 </div>
+
+
+
+
 
 <style>
 
@@ -76,8 +89,9 @@
     <p *ngIf="carpool.time !== null"><strong>Time:</strong> {{ carpool.time }}</p>
     <p><strong>Carpooling Type:</strong> {{ carpool.carpoolingType }}</p>
     <p><strong>Registration Number:</strong> {{ carpool.registrationNumber }}</p>
-    <p><strong>price per seat:</strong> {{ carpool.costPerSeat }}</p>
+    <p><strong>price per seat:</strong> {{ carpool.costPerSeat | currency:'dt':'symbol':'1.2-2' }}</p>
     <input type="number" [(ngModel)]="newBooking.nb" name="nb" placeholder="Enter nb">
+
     <button (click)="addBooking(carpool.carpoolingID)">Book This Carpool</button>
     <button (click)="confirmDelete(carpool.carpoolingID)">Delete Carpooling</button>
     <button class="update-button" routerLink="/carpooling/{{carpool.carpoolingID}}">Update</button>
@@ -85,5 +99,6 @@
     <div id="map_{{ carpool.carpoolingID }}" class="carpool-map"></div>
   </div>
 </div>
+
 
 <app-all-template-front></app-all-template-front>

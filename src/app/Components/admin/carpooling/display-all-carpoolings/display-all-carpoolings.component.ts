@@ -30,6 +30,7 @@ export class DisplayAllCarpoolingsComponent implements OnInit, AfterViewInit {
 // Inside your component class
   carpoolingTypes: CarpoolingType[] = [CarpoolingType.SPECIFIC, CarpoolingType.DAILY]; // Replace with your actual carpooling types
   departureLocationFilter: string = '';
+  selectedDay: string;
 
   // Chart options
 
@@ -359,6 +360,22 @@ export class DisplayAllCarpoolingsComponent implements OnInit, AfterViewInit {
       this.getCarpools();
     }
   }
-
+  async filterByDay(): Promise<void> {
+    console.log('Selected day:', this.selectedDay);
+    if (this.selectedDay) {
+      try {
+        const filteredCarpools = await this.carpoolingService.findByDay(this.selectedDay).toPromise();
+        this.carpoolings = filteredCarpools;
+        await this.fetchLocationNames();
+        await this.initializeMaps();
+        // Other operations if needed
+      } catch (error) {
+        console.error('Error filtering carpools by day:', error);
+      }
+    } else {
+      // If no day is selected, reset the list to all carpools
+      this.getCarpools();
+    }
+  }
 
 }

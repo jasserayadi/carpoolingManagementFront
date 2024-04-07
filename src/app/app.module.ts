@@ -15,7 +15,7 @@ import { HeaderFrontComponent } from './FrontOffice/header-front/header-front.co
 import { DynamicFrontComponent } from './FrontOffice/dynamic-front/dynamic-front.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import  {HttpClientModule} from "@angular/common/http";
-import { FeedbackComponent } from './Components/admin/feedback/feedback.component';
+import { FeedbackComponent } from './Components/user/feedback/feedback.component';
 import { AddCarpoolingComponent } from './Components/user/carpoolings/add-carpooling/add-carpooling.component';
 import { DisplayallCarpoolingsComponent } from './Components/user/carpoolings/displayall-carpoolings/displayall-carpoolings.component';
 import { AddBookingComponent } from './Components/user/Booking/add-booking/add-booking.component';

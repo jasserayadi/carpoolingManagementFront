@@ -1,0 +1,12 @@
+<form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()">
+  <div>
+    <label for="feed_Back">Feedback:</label>
+    <textarea id="feed_Back" formControlName="feed_Back" required></textarea>
+  </div>
+  <div>
+    <label for="rate">Rate:</label>
+    <input type="number" id="rate" formControlName="rate" required>
+  </div>
+  <!-- Add more form controls for other properties if needed -->
+  <button type="submit">Submit Feedback</button>
+</form>

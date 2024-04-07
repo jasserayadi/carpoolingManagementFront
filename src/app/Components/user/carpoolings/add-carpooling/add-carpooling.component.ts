@@ -29,10 +29,10 @@ export class AddCarpoolingComponent implements OnInit, AfterViewInit {
       time: [null],
       departureTime: [null],
       registrationNumber: [null, Validators.required],
-      longitudeDeparture: [null],
-      latitudeDeparture: [null],
-      longitudeDestination: [null],
-      latitudeDestination: [null]
+      longitudeDeparture: [null,Validators.required],
+      latitudeDeparture: [null,Validators.required],
+      longitudeDestination: [null,Validators.required],
+      latitudeDestination: [null,Validators.required]
     }, { validators: this.departureTimeValidator });
   }
   departureTimeValidator(group: FormGroup) {
@@ -53,8 +53,8 @@ export class AddCarpoolingComponent implements OnInit, AfterViewInit {
 
   initializeMap() {
     this.map = L.map('map', {
-      center: [51.505, -0.09],
-      zoom: 13,
+      center: [36.8983, 10.1894],
+      zoom: 18,
       layers: [
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '...' })
       ]

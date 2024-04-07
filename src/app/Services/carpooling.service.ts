@@ -44,5 +44,7 @@ export class CarpoolingService {
   findByDepartureTime(departureTime: string): Observable<Carpooling[]> {
     return this.http.get<Carpooling[]>(`${this.baseUrl}/findByDepartureTime?departureTime=${departureTime}`);
   }
-
+  findByDay(day: string): Observable<Carpooling[]> {
+    return this.http.get<Carpooling[]>(`${this.baseUrl}/findByDay/${day}`);
+  }
 }

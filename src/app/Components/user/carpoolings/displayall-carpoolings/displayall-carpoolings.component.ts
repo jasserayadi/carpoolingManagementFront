@@ -1,12 +1,13 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { CarpoolingService } from '../../../../Services/carpooling.service';
-import { Carpooling } from '../../../../entity/Carpooling';
-import { BookingService } from '../../../../Services/booking.service';
-import { Booking } from '../../../../entity/Booking';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {CarpoolingService} from '../../../../Services/carpooling.service';
+import {Carpooling} from '../../../../entity/Carpooling';
+import {BookingService} from '../../../../Services/booking.service';
+import {Booking} from '../../../../entity/Booking';
 import * as L from 'leaflet';
 import {CarpoolingType} from "../../../../entity/CarpoolingType";
 import 'leaflet-routing-machine';
 import 'leaflet-control-geocoder';
+import {Day} from "../../../../entity/Day";
 
 
 declare module 'leaflet' {
@@ -32,11 +33,14 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
   selectedCarpoolingType: CarpoolingType; // Variable to store the selected carpooling type
 // Inside your component class
   carpoolingTypes: CarpoolingType[] = [CarpoolingType.SPECIFIC, CarpoolingType.DAILY]; // Replace with your actual carpooling types
+  carpoolingDays: Day[]=[Day.FRIDAY,Day.MONDAY,Day.SATURDAY,Day.SUNDAY,Day.TUESDAY,Day.WEDNESDAY,Day.THURSDAY]
   departureLocationFilter: string = '';
   destinationLocationFilter:string='';
   departureTime: string;
   carpools: Carpooling[];
   searchDepartureTime: string;
+  carpoolingss: Carpooling[];
+  selectedDay: string;
   constructor(private carpoolingService: CarpoolingService, private bookingService: BookingService, private cd: ChangeDetectorRef) {
     this.myHeaders.append("Authorization", "App 795ecc02c9f2d49fe25924edd434f718-14affa4c-5bdd-4c88-b905-9eb13104e963");
     this.myHeaders.append("Content-Type", "application/json");
@@ -337,15 +341,34 @@ export class DisplayallCarpoolingsComponent implements OnInit, AfterViewInit {
       this.getCarpools();
     }
   }
+  async filterByDay(): Promise<void> {
+    console.log('Selected day:', this.selectedDay);
+    if (this.selectedDay) {
+      try {
+        const filteredCarpools = await this.carpoolingService.findByDay(this.selectedDay).toPromise();
+        this.carpoolings = filteredCarpools;
+        await this.fetchLocationNames();
+        await this.initializeMaps();
+        // Other operations if needed
+      } catch (error) {
+        console.error('Error filtering carpools by day:', error);
+      }
+    } else {
+      // If no day is selected, reset the list to all carpools
+      this.getCarpools();
+    }
+  }
   search(): void {
-    this.carpoolingService.findByDepartureTime(this.searchDepartureTime)
+    // Call the service method with the departureTime
+    this.carpoolingService.findByDepartureTime(this.departureTime)
       .subscribe({
-        next: (data) => {
-          this.carpools = data;
+        next: (data: Carpooling[]) => {
+          // Handle the response data
         },
         error: (error) => {
           console.error('Error:', error);
         }
       });
   }
+
   }

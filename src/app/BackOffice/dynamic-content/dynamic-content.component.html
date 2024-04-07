@@ -48,11 +48,27 @@
     <div class="col-sm-12 col-xl-6">
       <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Carpooling by location</h6>
+          <h6 class="mb-0">Carpoolings by day</h6>
           <a href="">Show All</a>
         </div>
         <div style="height: 293px; width: 100%;">
-          <div id="map" style="height: 100%; width: 100%;"></div>
+          <div style="height: 400px;">
+            <ngx-charts-bar-vertical
+              [view]="[400, 300]"
+
+              [results]="chartData2"
+              [gradient]="false"
+              [xAxis]="showXAxis"
+              [yAxis]="showYAxis"
+              [legend]="showLegend"
+              [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel"
+              xAxisLabel="Day of the Week"
+              yAxisLabel="Number of Carpoolings"
+             >
+            </ngx-charts-bar-vertical>
+          </div>
+
         </div>
       </div>
     </div>

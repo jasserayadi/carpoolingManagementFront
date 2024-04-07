@@ -1,4 +1,4 @@
-<h2>the list Carpools</h2>
+<h2>The list Carpools</h2>
 <!-- Add a dropdown menu for selecting carpooling type -->
 <div class="filter-wrapper">
   <div class="filter-container">
@@ -9,8 +9,21 @@
     </select>
   </div>
   <div class="filter-container">
-    <label for="departurePlace">Search by Departure Place:</label>
-    <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()">
+    <input type="text" id="departurePlace" [(ngModel)]="departureLocationFilter" (input)="filterCarpoolsByDeparture()" placeholder="Search by Departure Place:" class="search-input">
+  </div>
+
+
+  <div class="filter-container">
+    <label for="day">Select Day:</label>
+    <select id="day" [(ngModel)]="selectedDay" (change)="filterByDay()">
+      <option value="">All</option>
+      <option value="MONDAY">Monday</option>
+      <option value="TUESDAY">Tuesday</option>
+      <option value="WEDNESDAY">Wednesday</option>
+      <option value="THURSDAY">Thursday</option>
+      <option value="FRIDAY">Friday</option>
+      <!-- Add other days as needed -->
+    </select>
   </div>
 </div>
 
@@ -57,7 +70,7 @@
   <div class="carpool-card" *ngFor="let carpool of carpoolings">
     <p><strong>Departure Time:</strong> {{ carpool.departureTime }}</p>
     <p><strong>Available Seats:</strong> {{ carpool.availableSeats }}</p>
-    <p><strong>Cost Per Seat:</strong> {{ carpool.costPerSeat }}</p>
+    <p><strong>Cost Per Seat:</strong>  {{ carpool.costPerSeat | currency:'dt':'symbol':'1.2-2' }}</p>
     <p><strong>Day:</strong> {{ carpool.day }}</p>
     <p><strong>Time:</strong> {{ carpool.time }}</p>
     <p><strong>Carpooling Type:</strong> {{ carpool.carpoolingType }}</p>

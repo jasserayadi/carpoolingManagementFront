@@ -49,15 +49,31 @@ export class UpdateCarpoolingComponent implements OnInit {
 
   initializeMap() {
     this.map = L.map('map', {
-      center: [51.505, -0.09],
-      zoom: 13,
+      center: [36.8983, 10.1894],
+      zoom: 18,
       layers: [
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '...' })
       ]
     });
 
     this.map.on('click', (e: any) => this.onMapClick(e));
-    const geocoder1 = (<any>L.Control).geocoder().addTo(this.map);
+
+    // Initialize geocoder control with defaultMarkGeocode set to false
+    const geocoder1 = (<any>L.Control).geocoder({
+      defaultMarkGeocode: false
+    }).addTo(this.map);
+
+    // Optionally, you can listen for the markgeocode event to fit bounds to the geocoded location
+    geocoder1.on('markgeocode', (e: any) => {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]);
+      this.map.fitBounds(poly.getBounds());
+    });
   }
 
   async onMapClick(e: any) {
