@@ -11,6 +11,7 @@ import { FeedbackService } from '../../../Services/feedback.service';
 export class FeedbackComponent implements OnInit {
   feedbackForm: FormGroup; // Define a FormGroup
   feedback: FeedBack = new FeedBack();
+  submitted: boolean = false; // Flag to track form submission
 
   constructor(private fb: FormBuilder, private feedbackService: FeedbackService) { }
 
@@ -33,6 +34,7 @@ export class FeedbackComponent implements OnInit {
     this.feedbackService.addFeedback(this.feedback).subscribe(response => {
       // Handle successful feedback addition
       console.log('Feedback added:', response);
+      this.submitted = true; // Set submitted flag to true
       // You can also redirect or show a success message here
     }, error => {
       // Handle error

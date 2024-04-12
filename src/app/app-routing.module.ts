@@ -17,12 +17,19 @@ import {
 import {
   AdminDisplayAllBookingComponent
 } from "./Components/admin/booking/admin-display-all-booking/admin-display-all-booking.component";
+import {
+  DisplayAllFeedbacksComponent
+} from "./Components/admin/feedback/display-all-feedbacks/display-all-feedbacks.component";
 
 const routes: Routes = [
 
   {
     path: "addFeedback",
     component:FeedbackComponent
+  },
+  {
+    path: "allfeedback",
+    component:DisplayAllFeedbacksComponent
   },
   {path: "HomeAdmin",
     component: HomeBackComponent},

@@ -25,6 +25,7 @@ import { DisplayAllCarpoolingsComponent } from './Components/admin/carpooling/di
 import { AdminDisplayAllBookingComponent } from './Components/admin/booking/admin-display-all-booking/admin-display-all-booking.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {DisplayAllFeedbacksComponent} from "./Components/admin/feedback/display-all-feedbacks/display-all-feedbacks.component";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UpdateCarpoolingComponent,
     DisplayAllCarpoolingsComponent,
     AdminDisplayAllBookingComponent,
+    DisplayAllFeedbacksComponent
+
 
 
   ],

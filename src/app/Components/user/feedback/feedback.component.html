@@ -1,12 +1,15 @@
-<form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()">
-  <div>
-    <label for="feed_Back">Feedback:</label>
-    <textarea id="feed_Back" formControlName="feed_Back" required></textarea>
-  </div>
-  <div>
-    <label for="rate">Rate:</label>
-    <input type="number" id="rate" formControlName="rate" required>
-  </div>
-  <!-- Add more form controls for other properties if needed -->
-  <button type="submit">Submit Feedback</button>
-</form>
+<div class="container">
+  <form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()" class="feedback-form">
+    <div>
+      <label for="feed_Back">Feedback:</label>
+      <textarea id="feed_Back" formControlName="feed_Back" required [disabled]="submitted"></textarea>
+    </div>
+    <div>
+      <label for="rate">Rate:</label>
+      <input type="number" id="rate" formControlName="rate" required [disabled]="submitted">
+    </div>
+    <!-- Add more form controls for other properties if needed -->
+    <button type="submit" style="background: #ec4848" [disabled]="submitted">Submit Feedback</button>
+  </form>
+</div>
+<app-all-template-front></app-all-template-front>
